@@ -25,7 +25,7 @@ SETTINGS_FILE="$CWD/.claude/ralph-specum.local.md"
 if [ -f "$SETTINGS_FILE" ]; then
     # Extract enabled setting from YAML frontmatter (normalize case and strip quotes)
     ENABLED=$(sed -n '/^---$/,/^---$/p' "$SETTINGS_FILE" 2>/dev/null \
-        | awk -F: '/^enabled:/{val=$2; gsub(/[[:space:]"'"'"']/, "", val); print tolower(val); exit}')
+        | awk -F: '/^enabled:/{val=$2; gsub(/[[:space:]]"'"'"'/, "", val); print tolower(val); exit}')
     if [ "$ENABLED" = "false" ]; then
         exit 0
     fi
@@ -62,6 +62,30 @@ if command -v stat >/dev/null 2>&1; then
     fi
 fi
 
+# Update epic state when spec completes, then refresh spec index.
+# Marks the current spec as "completed" in its parent epic's state file (if applicable).
+update_epic_state() {
+    local epic_name
+    epic_name=$(jq -r '.epicName // empty' "$STATE_FILE" 2>/dev/null || true)
+    local current_epic_file="$CWD/specs/.current-epic"
+    if [ -n "$epic_name" ] && [ -f "$current_epic_file" ]; then
+        local epic_state_file="$CWD/specs/_epics/$epic_name/.epic-state.json"
+        if [ -f "$epic_state_file" ]; then
+            local tmp_file
+            tmp_file=$(mktemp "${epic_state_file}.tmp.XXXXXX")
+            if jq --arg spec "$SPEC_NAME" '
+              .specs |= map(if .name == $spec then .status = "completed" else . end)
+            ' "$epic_state_file" > "$tmp_file"; then
+                mv "$tmp_file" "$epic_state_file"
+            else
+                rm -f "$tmp_file"
+            fi
+            echo "[ralph-specum] Updated epic '$epic_name': spec '$SPEC_NAME' marked completed" >&2
+        fi
+    fi
+    "$SCRIPT_DIR/update-spec-index.sh" --quiet 2>/dev/null || true
+}
+
 # Check for ALL_TASKS_COMPLETE in transcript (backup termination detection)
 # Use specific pattern to avoid false positives from code/comments containing the phrase
 TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null || true)
@@ -71,47 +95,13 @@ if [ -n "$TRANSCRIPT_PATH" ] && [ -f "$TRANSCRIPT_PATH" ]; then
         echo "[ralph-specum] ALL_TASKS_COMPLETE detected in transcript" >&2
         # Note: State file cleanup is handled by the coordinator (implement.md Section 10)
         # Do not delete here to avoid race condition
-        # Update epic state if this spec belongs to an epic
-        EPIC_NAME_VAL=$(jq -r '.epicName // empty' "$STATE_FILE" 2>/dev/null || true)
-        CURRENT_EPIC_FILE="$CWD/specs/.current-epic"
-        if [ -n "$EPIC_NAME_VAL" ] && [ -f "$CURRENT_EPIC_FILE" ]; then
-            EPIC_STATE_FILE="$CWD/specs/_epics/$EPIC_NAME_VAL/.epic-state.json"
-            if [ -f "$EPIC_STATE_FILE" ]; then
-                TMP_FILE=$(mktemp "${EPIC_STATE_FILE}.tmp.XXXXXX")
-                if jq --arg spec "$SPEC_NAME" '
-                  .specs |= map(if .name == $spec then .status = "completed" else . end)
-                ' "$EPIC_STATE_FILE" > "$TMP_FILE"; then
-                    mv "$TMP_FILE" "$EPIC_STATE_FILE"
-                else
-                    rm -f "$TMP_FILE"
-                fi
-                echo "[ralph-specum] Updated epic '$EPIC_NAME_VAL': spec '$SPEC_NAME' marked completed" >&2
-            fi
-        fi
-        "$SCRIPT_DIR/update-spec-index.sh" --quiet 2>/dev/null || true
+        update_epic_state
         exit 0
     fi
     # Fallback: check last 20 lines for edge cases (very recent signal)
     if tail -20 "$TRANSCRIPT_PATH" 2>/dev/null | grep -qE '(^|\W)ALL_TASKS_COMPLETE(\W|$)'; then
         echo "[ralph-specum] ALL_TASKS_COMPLETE detected in transcript (tail-end)" >&2
-        # Update epic state if this spec belongs to an epic
-        EPIC_NAME_VAL=$(jq -r '.epicName // empty' "$STATE_FILE" 2>/dev/null || true)
-        CURRENT_EPIC_FILE="$CWD/specs/.current-epic"
-        if [ -n "$EPIC_NAME_VAL" ] && [ -f "$CURRENT_EPIC_FILE" ]; then
-            EPIC_STATE_FILE="$CWD/specs/_epics/$EPIC_NAME_VAL/.epic-state.json"
-            if [ -f "$EPIC_STATE_FILE" ]; then
-                TMP_FILE=$(mktemp "${EPIC_STATE_FILE}.tmp.XXXXXX")
-                if jq --arg spec "$SPEC_NAME" '
-                  .specs |= map(if .name == $spec then .status = "completed" else . end)
-                ' "$EPIC_STATE_FILE" > "$TMP_FILE"; then
-                    mv "$TMP_FILE" "$EPIC_STATE_FILE"
-                else
-                    rm -f "$TMP_FILE"
-                fi
-                echo "[ralph-specum] Updated epic '$EPIC_NAME_VAL': spec '$SPEC_NAME' marked completed" >&2
-            fi
-        fi
-        "$SCRIPT_DIR/update-spec-index.sh" --quiet 2>/dev/null || true
+        update_epic_state
         exit 0
     fi
 fi

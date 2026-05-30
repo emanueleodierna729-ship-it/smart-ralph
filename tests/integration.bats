@@ -184,3 +184,35 @@ load 'helpers/setup.bash'
     [ "$status" -eq 0 ]
     assert_json_reason_contains "ALL_TASKS_COMPLETE"
 }
+
+@test "integration: awaitingApproval gate blocks continuation" {
+    create_state_file "execution" 1 3 1
+
+    local state_file="$TEST_WORKSPACE/specs/test-spec/.ralph-state.json"
+    jq '.awaitingApproval = true' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+
+    # With awaitingApproval=true, loop should stop (exits silently)
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_output_not_contains "Continue spec"
+}
+
+@test "integration: awaitingApproval cleared resumes loop" {
+    create_state_file "execution" 1 3 1
+
+    local state_file="$TEST_WORKSPACE/specs/test-spec/.ralph-state.json"
+    # First: set awaitingApproval
+    jq '.awaitingApproval = true' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_output_not_contains "Continue spec"
+
+    # Clear awaitingApproval (simulates user approval)
+    jq 'del(.awaitingApproval)' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_json_block
+    assert_json_reason_contains "Continue spec"
+}

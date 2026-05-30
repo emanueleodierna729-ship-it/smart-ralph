@@ -368,3 +368,74 @@ load 'helpers/setup.bash'
     # Should continue (50 < 100)
     assert_json_reason_contains "Continue"
 }
+
+# =============================================================================
+# Test: awaitingApproval field management
+# =============================================================================
+
+@test "awaitingApproval defaults to absent (not set)" {
+    create_state_file "execution" 0 5 1
+
+    local state_file="$TEST_WORKSPACE/specs/test-spec/.ralph-state.json"
+
+    # Default state file should not have awaitingApproval
+    local has_field
+    has_field=$(jq 'has("awaitingApproval")' "$state_file")
+    [ "$has_field" = "false" ]
+}
+
+@test "awaitingApproval can be set to true via jq" {
+    create_state_file "execution" 2 5 1
+
+    local state_file="$TEST_WORKSPACE/specs/test-spec/.ralph-state.json"
+
+    jq '.awaitingApproval = true' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+
+    run jq '.awaitingApproval' "$state_file"
+    [ "$status" -eq 0 ]
+    [ "$output" = "true" ]
+}
+
+@test "awaitingApproval can be cleared by removing field" {
+    create_state_file "execution" 2 5 1
+
+    local state_file="$TEST_WORKSPACE/specs/test-spec/.ralph-state.json"
+
+    # Set then remove
+    jq '.awaitingApproval = true' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+    jq 'del(.awaitingApproval)' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+
+    run jq 'has("awaitingApproval")' "$state_file"
+    [ "$status" -eq 0 ]
+    [ "$output" = "false" ]
+}
+
+# =============================================================================
+# Test: globalIteration field management
+# =============================================================================
+
+@test "globalIteration starts at 1 by default" {
+    create_state_file "execution" 0 5 1
+
+    local state_file="$TEST_WORKSPACE/specs/test-spec/.ralph-state.json"
+
+    # Default state file does not have globalIteration; stop-watcher defaults to 1
+    # Verify we can add it
+    jq '.globalIteration = 1' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+
+    run jq '.globalIteration' "$state_file"
+    [ "$status" -eq 0 ]
+    [ "$output" = "1" ]
+}
+
+@test "globalIteration can be incremented" {
+    create_state_file "execution" 0 5 1
+
+    local state_file="$TEST_WORKSPACE/specs/test-spec/.ralph-state.json"
+
+    jq '.globalIteration = 5 | .maxGlobalIterations = 100' "$state_file" > "$state_file.tmp" && mv "$state_file.tmp" "$state_file"
+
+    run jq '.globalIteration' "$state_file"
+    [ "$status" -eq 0 ]
+    [ "$output" = "5" ]
+}

@@ -528,12 +528,104 @@ More text")
 }
 
 @test "both ALL_TASKS_COMPLETE detection paths call update-spec-index.sh" {
-    # Structural test: verify both grep paths have the index update call
-    local primary_count
-    primary_count=$(sed -n '/tail -500.*ALL_TASKS_COMPLETE/,/exit 0/p' "$STOP_WATCHER_SCRIPT" | grep -c 'update-spec-index.sh' || echo 0)
-    [ "$primary_count" -ge 1 ]
+    # Structural test: verify the shared update_epic_state function contains the index update call
+    local func_count
+    func_count=$(grep -c 'update-spec-index.sh' "$STOP_WATCHER_SCRIPT" || echo 0)
+    [ "$func_count" -ge 1 ]
 
-    local fallback_count
-    fallback_count=$(sed -n '/tail -20.*ALL_TASKS_COMPLETE/,/exit 0/p' "$STOP_WATCHER_SCRIPT" | grep -c 'update-spec-index.sh' || echo 0)
-    [ "$fallback_count" -ge 1 ]
+    # Both detection paths should call update_epic_state
+    local call_count
+    call_count=$(grep -c 'update_epic_state' "$STOP_WATCHER_SCRIPT" || echo 0)
+    [ "$call_count" -ge 2 ]
+}
+
+# =============================================================================
+# Test: Tasks.md cross-check when state says complete
+# =============================================================================
+
+@test "outputs continuation prompt when state complete but tasks.md has unchecked items" {
+    # State says done (taskIndex == totalTasks) but tasks.md disagrees
+    create_state_file "execution" 3 3 1
+    create_tasks_file 3  # creates 3 unchecked tasks
+
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_json_block
+    assert_json_reason_contains "Tasks incomplete"
+    assert_json_reason_contains "unchecked"
+}
+
+@test "exits silently when state complete and tasks.md has no unchecked items" {
+    create_state_file "execution" 3 3 1
+    # Create tasks.md with all checked items
+    local spec_dir="$TEST_WORKSPACE/specs/test-spec"
+    cat > "$spec_dir/tasks.md" <<'EOF'
+---
+spec: test-spec
+phase: tasks
+total_tasks: 3
+---
+
+# Tasks: test-spec
+
+- [x] 1.1 Task one
+- [x] 1.2 Task two
+- [x] 1.3 Task three
+EOF
+
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_output_not_contains "Continue spec"
+    assert_output_not_contains "unchecked"
+}
+
+@test "exits silently when state complete and no tasks.md exists" {
+    create_state_file "execution" 3 3 1
+    # No tasks.md file
+
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_output_not_contains "Continue spec"
+}
+
+# =============================================================================
+# Test: Parallel task group detection
+# =============================================================================
+
+@test "includes parallel marker in system message for parallel tasks" {
+    create_state_file "execution" 0 3 1
+    local spec_dir="$TEST_WORKSPACE/specs/test-spec"
+    cat > "$spec_dir/tasks.md" <<'EOF'
+---
+spec: test-spec
+phase: tasks
+total_tasks: 3
+---
+
+# Tasks: test-spec
+
+- [ ] [P] 1.1 Parallel task one
+- [ ] [P] 1.2 Parallel task two
+- [ ] 1.3 Sequential task
+EOF
+
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_json_block
+    assert_json_system_message_contains "PARALLEL"
+}
+
+@test "does not include parallel marker for sequential tasks" {
+    create_state_file "execution" 0 3 1
+    create_tasks_file 3  # sequential tasks
+
+    run run_stop_watcher
+    [ "$status" -eq 0 ]
+    assert_json_block
+    # System message should NOT contain PARALLEL
+    local json
+    json=$(echo "$output" | grep -v '^\[ralph-specum\]' | jq -s 'last')
+    local msg
+    msg=$(echo "$json" | jq -r '.systemMessage // empty')
+    [[  "$msg" != *"PARALLEL"* ]]
 }

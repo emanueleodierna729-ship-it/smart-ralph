@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welding Export — Compratori di saldatrici usate</title>
+<style>
+  :root { --bg:#0f1720; --card:#1b2733; --accent:#ff7a18; --text:#e8eef4; --muted:#9fb0c0; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+         background: var(--bg); color: var(--text); }
+  header { padding: 28px 20px; text-align:center; background: linear-gradient(135deg,#1b2733,#0f1720); }
+  h1 { margin:0 0 6px; font-size: 1.6rem; }
+  header p { margin:0; color: var(--muted); }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 20px; }
+  .controls { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+  input, select { padding:10px 12px; border-radius:8px; border:1px solid #2c3a48;
+                  background:#121c26; color:var(--text); font-size:1rem; }
+  input { flex:1; min-width:200px; }
+  .grid { display:grid; gap:14px; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); }
+  .card { background:var(--card); border:1px solid #2c3a48; border-radius:12px; padding:16px; }
+  .card h2 { margin:0 0 4px; font-size:1.15rem; }
+  .tag { display:inline-block; font-size:.72rem; padding:2px 8px; border-radius:999px;
+         background:#243140; color:var(--muted); margin:0 6px 8px 0; }
+  .tag.buyer { background:#2a3d1f; color:#bfe79a; }
+  .tag.export { background:#3d2f1f; color:#ffcf99; }
+  .card a { color:var(--accent); text-decoration:none; }
+  .card a:hover { text-decoration:underline; }
+  .row { margin:4px 0; color:var(--text); font-size:.92rem; }
+  .row b { color:var(--muted); font-weight:500; }
+  .note { color:var(--muted); font-size:.85rem; }
+  .warn { margin-top:24px; background:#2a1f1f; border:1px solid #5a3030; border-radius:10px;
+          padding:14px 16px; color:#ffd9d0; font-size:.9rem; }
+  .empty { text-align:center; color:var(--muted); padding:40px; }
+  footer { text-align:center; color:var(--muted); font-size:.8rem; padding:24px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚡ Welding Export</h1>
+  <p>Aziende reali che acquistano saldatrici usate — contatti verificati sul web</p>
+</header>
+
+<div class="wrap">
+  <div class="controls">
+    <input id="search" type="text" placeholder="Cerca per nome, città, paese…" autofocus>
+    <select id="country">
+      <option value="">Tutti i paesi</option>
+    </select>
+    <select id="type">
+      <option value="">Tutti i tipi</option>
+      <option value="buyer">Acquista usato</option>
+      <option value="export">Export internazionale</option>
+    </select>
+  </div>
+
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty" hidden>Nessun risultato. Prova un'altra ricerca.</div>
+
+  <div class="warn">
+    ⚠️ <b>Verifica sempre prima di trattare.</b> Questi contatti sono raccolti da fonti pubbliche e
+    possono cambiare. Per il "pagamento immediato" preferisci il <b>bonifico bancario</b>,
+    non versare mai anticipi o commissioni, e verifica P.IVA / identità dell'azienda prima dell'export.
+  </div>
+</div>
+
+<footer>Dati raccolti da fonti pubbliche (giugno 2026). Strumento informativo — non sostituisce verifiche dirette.</footer>
+
+<script>
+// Aziende reali con contatti verificati tramite ricerca web.
+const COMPANIES = [
+  {
+    name: "Westermans International Ltd",
+    country: "Regno Unito", city: "Groby, Leicester",
+    types: ["buyer","export"],
+    address: "Unit 4 Midland Distribution Centre, Markfield Road, Groby, Leicestershire, LE6 0FS, UK",
+    phone: "+44 116 269 6941",
+    email: "welding@westermans.com",
+    web: "https://www.westermans.com",
+    note: "Compra usato ed esporta nel mondo. Ritiro e pagamento rapido via bonifico (pagina 'Wanted to buy')."
+  },
+  {
+    name: "Surplex GmbH",
+    country: "Germania", city: "Düsseldorf",
+    types: ["buyer","export"],
+    address: "Theodorstraße 105, 40472 Düsseldorf, Germania",
+    phone: "+49 211 869 42600",
+    email: "info@surplex.com",
+    web: "https://www.surplex.com",
+    note: "Casa d'aste industriale: compra/vende macchinari usati in tutto il mondo. Staff in 20 lingue."
+  },
+  {
+    name: "UWEL — Used Welding Equipment",
+    country: "Stati Uniti", city: "Milford, Ohio",
+    types: ["buyer","export"],
+    address: "4876 Tealtown Rd., Milford, Ohio, USA",
+    phone: "",
+    email: "",
+    web: "https://www.usedweldingequipment.com",
+    note: "\"We Buy Surplus Used Welding Equipment\". Contatto tramite form sul sito."
+  },
+  {
+    name: "Salfershop",
+    country: "Italia", city: "Roma",
+    types: ["buyer"],
+    address: "Magazzino ~1.000 m², Roma",
+    phone: "+39 06 94368820",
+    email: "commerciale@salfershop.com",
+    web: "https://www.salfershop.com",
+    note: "Acquisto e vendita saldatrici usate, assistenza e riparazione."
+  },
+  {
+    name: "Tecnogas S.r.l.",
+    country: "Italia", city: "Modena",
+    types: ["buyer"],
+    address: "Via G. Fucà 161, Modena",
+    phone: "+39 059 370870",
+    email: "info@tecnogas-srl.it",
+    web: "https://tecnogas-srl.it",
+    note: "Usato garantito: controllo, rinnovo e rigenerazione macchinari di saldatura."
+  },
+  {
+    name: "Exapro",
+    country: "Internazionale", city: "Marketplace online",
+    types: ["export"],
+    address: "Piattaforma B2B europea",
+    phone: "",
+    email: "",
+    web: "https://www.exapro.com",
+    note: "Marketplace per comprare/vendere macchine di saldatura usate a livello internazionale."
+  }
+];
+
+const grid = document.getElementById('grid');
+const empty = document.getElementById('empty');
+const searchEl = document.getElementById('search');
+const countryEl = document.getElementById('country');
+const typeEl = document.getElementById('type');
+
+// Popola filtro paesi
+[...new Set(COMPANIES.map(c => c.country))].sort().forEach(c => {
+  const o = document.createElement('option'); o.value = c; o.textContent = c; countryEl.appendChild(o);
+});
+
+function typeLabel(t){ return t === 'buyer' ? 'Acquista usato' : 'Export internazionale'; }
+
+function render() {
+  const q = searchEl.value.trim().toLowerCase();
+  const country = countryEl.value;
+  const type = typeEl.value;
+  const list = COMPANIES.filter(c => {
+    const hay = (c.name + ' ' + c.city + ' ' + c.country + ' ' + c.note).toLowerCase();
+    return (!q || hay.includes(q)) &&
+           (!country || c.country === country) &&
+           (!type || c.types.includes(type));
+  });
+  grid.innerHTML = list.map(c => `
+    <div class="card">
+      <h2>${c.name}</h2>
+      ${c.types.map(t => `<span class="tag ${t}">${typeLabel(t)}</span>`).join('')}
+      <div class="row"><b>📍</b> ${c.address}</div>
+      ${c.phone ? `<div class="row"><b>📞</b> <a href="tel:${c.phone.replace(/\s/g,'')}">${c.phone}</a></div>` : ''}
+      ${c.email ? `<div class="row"><b>✉️</b> <a href="mailto:${c.email}">${c.email}</a></div>` : ''}
+      <div class="row"><b>🌐</b> <a href="${c.web}" target="_blank" rel="noopener">${c.web.replace(/^https?:\/\//,'')}</a></div>
+      <div class="row note">${c.note}</div>
+    </div>
+  `).join('');
+  empty.hidden = list.length > 0;
+}
+
+searchEl.addEventListener('input', render);
+countryEl.addEventListener('change', render);
+typeEl.addEventListener('change', render);
+render();
+</script>
+</body>
+</html>

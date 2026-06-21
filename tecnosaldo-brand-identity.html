@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tecnosaldo — Brand Identity System</title>
+    <meta name="hz:slide-selector" content=".poster" />
+    <meta name="hz:canvas-width" content="1123" />
+    <meta name="hz:canvas-height" content="1587" />
+    <link rel="stylesheet" href="https://use.typekit.net/lcc2tfp.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #e0e0e0;
+        }
+        .poster {
+            position: relative;
+            width: 297mm;
+            height: 420mm;
+            background: #ffffff;
+            overflow: hidden;
+            font-family: "acumin-pro", sans-serif;
+        }
+
+        /* === TOP HEADER BAND === */
+        .header-band {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 220px;
+            background: #090d1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-band .logo-main {
+            width: 340px;
+            height: auto;
+            margin-bottom: 14px;
+        }
+        .header-band .tagline {
+            font-family: "industry", sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #f9b400;
+        }
+        .header-band .sub-tagline {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        /* === SECTION TITLE STYLE === */
+        .section-title {
+            font-family: "industry", sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #090d1a;
+            border-bottom: 2px solid #f9b400;
+            padding-bottom: 6px;
+            margin-bottom: 18px;
+            display: inline-block;
+        }
+
+        /* === LOGO USAGE SECTION === */
+        .logo-section {
+            position: absolute;
+            top: 248px;
+            left: 56px;
+            right: 56px;
+        }
+        .logo-variants {
+            display: flex;
+            gap: 16px;
+            margin-top: 0;
+        }
+        .logo-variant {
+            flex: 1;
+            height: 100px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-variant img {
+            width: 180px;
+            height: auto;
+        }
+        .logo-variant.dark {
+            background: #090d1a;
+        }
+        .logo-variant.gold {
+            background: #f9b400;
+        }
+        .logo-variant.light {
+            background: #f2f2f2;
+            border: 1px solid #ddd;
+        }
+        .variant-label {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #999;
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        /* === COLOR PALETTE === */
+        .color-section {
+            position: absolute;
+            top: 430px;
+            left: 56px;
+            right: 56px;
+        }
+        .color-row {
+            display: flex;
+            gap: 14px;
+        }
+        .color-chip {
+            flex: 1;
+            text-align: center;
+        }
+        .color-swatch {
+            height: 72px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .color-swatch.outline {
+            border: 1px solid #ddd;
+        }
+        .color-name {
+            font-family: "industry", sans-serif;
+            font-weight: 500;
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+        .color-hex {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 9px;
+            color: #999;
+            letter-spacing: 0.5px;
+        }
+        .color-rgb {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 8px;
+            color: #bbb;
+        }
+
+        /* === TYPOGRAPHY === */
+        .type-section {
+            position: absolute;
+            top: 632px;
+            left: 56px;
+            right: 56px;
+        }
+        .type-grid {
+            display: flex;
+            gap: 40px;
+        }
+        .type-col {
+            flex: 1;
+        }
+        .type-family-label {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 8px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #f9b400;
+            margin-bottom: 8px;
+        }
+        .type-display-large {
+            font-family: "industry", sans-serif;
+            font-weight: 700;
+            font-size: 48px;
+            color: #090d1a;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .type-display-medium {
+            font-family: "industry", sans-serif;
+            font-weight: 500;
+            font-size: 32px;
+            color: #090d1a;
+            line-height: 1.1;
+            margin-bottom: 4px;
+        }
+        .type-alphabet {
+            font-family: "industry", sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 2px;
+            line-height: 1.8;
+            margin-top: 10px;
+        }
+        .type-body-large {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 28px;
+            color: #090d1a;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+        .type-body-bold {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: #090d1a;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+        .type-body-sample {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 12px;
+            color: #444;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        /* === BRAND PATTERN / ICON SYSTEM === */
+        .pattern-section {
+            position: absolute;
+            top: 870px;
+            left: 56px;
+            right: 56px;
+        }
+        .pattern-grid {
+            display: flex;
+            gap: 14px;
+        }
+        .pattern-card {
+            flex: 1;
+            background: #090d1a;
+            border-radius: 6px;
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .pattern-icon {
+            margin-bottom: 12px;
+        }
+        .pattern-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+        .pattern-label {
+            font-family: "industry", sans-serif;
+            font-weight: 500;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #f9b400;
+            margin-bottom: 4px;
+        }
+        .pattern-desc {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 8px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        /* === BRAND VALUES === */
+        .values-section {
+            position: absolute;
+            top: 1040px;
+            left: 56px;
+            right: 56px;
+        }
+        .values-grid {
+            display: flex;
+            gap: 20px;
+        }
+        .value-item {
+            flex: 1;
+            border-left: 3px solid #f9b400;
+            padding-left: 14px;
+        }
+        .value-name {
+            font-family: "industry", sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #090d1a;
+            margin-bottom: 4px;
+        }
+        .value-desc {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 9px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* === LOGO CONSTRUCTION / CLEAR SPACE === */
+        .construction-section {
+            position: absolute;
+            top: 1170px;
+            left: 56px;
+            right: 56px;
+        }
+        .construction-grid {
+            display: flex;
+            gap: 30px;
+        }
+        .construction-box {
+            flex: 1;
+        }
+        .clearspace-demo {
+            background: #f7f7f7;
+            border-radius: 6px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 110px;
+            border: 1px dashed #ddd;
+        }
+        .clearspace-demo img {
+            width: 160px;
+            height: auto;
+        }
+        .clearspace-marker {
+            position: absolute;
+            border: 1px dashed #f9b400;
+            top: 14px; left: 14px; right: 14px; bottom: 14px;
+            border-radius: 3px;
+        }
+        .construction-label {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #999;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .min-size-demo {
+            background: #f7f7f7;
+            border-radius: 6px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border: 1px dashed #ddd;
+        }
+        .min-size-item {
+            text-align: center;
+        }
+        .min-size-item img {
+            height: auto;
+            display: block;
+            margin: 0 auto 6px;
+        }
+        .min-size-item span {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 7px;
+            color: #999;
+            letter-spacing: 1px;
+        }
+
+        /* === BOTTOM BAND === */
+        .footer-band {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 130px;
+            background: #090d1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 56px;
+        }
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .footer-left img {
+            width: 140px;
+            height: auto;
+        }
+        .footer-divider {
+            width: 1px;
+            height: 40px;
+            background: #333;
+        }
+        .footer-info {
+            color: #888;
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 9px;
+            line-height: 1.6;
+        }
+        .footer-info .highlight {
+            color: #f9b400;
+        }
+        .footer-right {
+            text-align: right;
+        }
+        .footer-year {
+            font-family: "industry", sans-serif;
+            font-weight: 700;
+            font-size: 36px;
+            color: #1a1a1a;
+            line-height: 1;
+        }
+        .footer-year span {
+            color: #f9b400;
+        }
+        .footer-label {
+            font-family: "acumin-pro", sans-serif;
+            font-weight: 400;
+            font-size: 8px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #555;
+        }
+
+        /* === GOLD ACCENT LINE === */
+        .gold-line {
+            position: absolute;
+            left: 0; right: 0;
+            height: 3px;
+            background: #f9b400;
+        }
+    </style>
+</head>
+<body>
+    <div class="poster" data-canvas-width="1123" data-canvas-height="1587">
+
+        <!-- TOP HEADER -->
+        <div class="header-band">
+            <img class="logo-main" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAA5CAYAAADum22qAAACl0lEQVR4nO3VS04sQQxE0V4Bi2cRjFkgYtBSCxVU2uFwfrhH6tGjnP7qPR4AAAAAAAAAAAAAAAAA0OXz4/3t+zc7DwAFngfNYQOb+3nMHDWwMQ4aOMRvx8xRAxu6O2iOGtjEyDFz1MAmOGjgEJFj5qiBhWWOmYOGXfeSnbLUJxz0avksKzvszFLsEns0XrbHrhlUzni0tqr8o/Ej+a2Ut3sWpQ+rB6IU665BaXh33hWznbU/kfiRHFfKu2Mm1oPYPX5Fw7vzVmYbWhxTDaOxo7l25e2KH6rZlcAzid1iZ+OO9tfd88wb4auYvDeZfN15d/RFrX0oQff3s+JXNjy6sHe5VxxFR4+qe9s1V6VeNXdn7aFCnN+vEnvkvat3XQtbtWBKfs69cM3Wuc8V8atiWB9wLJO7+OwiK3/vGHxl76trcMdX+pb9fuTfO3KUHlCTU4fZOfhoXUoPsjlGFkydgSt2VX+UvinfV+TtrH+p/6Wv3nQVPxLLtfxKjsq70Ryd8Z1LPXOf1fzU2ksecA+za/Bd9UXyvovhPipnfNdiz97njhyXb8Jfb3UOvqO+6sG7j8oZv3O2nfvckaP1AXdyruFX11k9eOfSj8R31Ow4jmxtzr448ytpgpqgOtTOuDNrXWXhO5d3p53piq/MdrjxswfXtRxV/XqNNTtXZVYjfz9zL2bsS0dt2dmGmq9+v3oTM82cmXdsuvk87r5zvLnyr6O+zGxTzZ85PNc7V/Eq++bMuyrHaH9W2ovuX0eN0dneUh7arZFXcSr75si7KrfoW2o+kRlU7oxz/yp7rewe/hGWCzgIBw0chGMGDsNBA4fhmIHDcNDAQThm4DAcM3AYDho4DMcMHIZjBgAAAAAAAAAAAAAAAHDrCzxcUHhZjQv3AAAAAElFTkSuQmCC" alt="Tecnosaldo Logo" />
+            <div class="tagline">Brand Identity System</div>
+            <div class="sub-tagline">Distributore Ufficiale Miller Electric &amp; ESAB — Liguria</div>
+        </div>
+        <div class="gold-line" style="top: 220px;"></div>
+
+        <!-- LOGO USAGE -->
+        <div class="logo-section">
+            <div class="section-title">Logo Variations</div>
+            <div class="logo-variants">
+                <div style="flex:1; text-align:center;">
+                    <div class="logo-variant dark">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAA5CAYAAADum22qAAACl0lEQVR4nO3VS04sQQxE0V4Bi2cRjFkgYtBSCxVU2uFwfrhH6tGjnP7qPR4AAAAAAAAAAAAAAAAA0OXz4/3t+zc7DwAFngfNYQOb+3nMHDWwMQ4aOMRvx8xRAxu6O2iOGtjEyDFz1MAmOGjgEJFj5qiBhWWOmYOGXfeSnbLUJxz0avksKzvszFLsEns0XrbHrhlUzni0tqr8o/Ej+a2Ut3sWpQ+rB6IU665BaXh33hWznbU/kfiRHFfKu2Mm1oPYPX5Fw7vzVmYbWhxTDaOxo7l25e2KH6rZlcAzid1iZ+OO9tfd88wb4auYvDeZfN15d/RFrX0oQff3s+JXNjy6sHe5VxxFR4+qe9s1V6VeNXdn7aFCnN+vEnvkvat3XQtbtWBKfs69cM3Wuc8V8atiWB9wLJO7+OwiK3/vGHxl76trcMdX+pb9fuTfO3KUHlCTU4fZOfhoXUoPsjlGFkydgSt2VX+UvinfV+TtrH+p/6Wv3nQVPxLLtfxKjsq70Ryd8Z1LPXOf1fzU2ksecA+za/Bd9UXyvovhPipnfNdiz97njhyXb8Jfb3UOvqO+6sG7j8oZv3O2nfvckaP1AXdyruFX11k9eOfSj8R31Ow4jmxtzr448ytpgpqgOtTOuDNrXWXhO5d3p53piq/MdrjxswfXtRxV/XqNNTtXZVYjfz9zL2bsS0dt2dmGmq9+v3oTM82cmXdsuvk87r5zvLnyr6O+zGxTzZ85PNc7V/Eq++bMuyrHaH9W2ovuX0eN0dneUh7arZFXcSr75si7KrfoW2o+kRlU7oxz/yp7rewe/hGWCzgIBw0chGMGDsNBA4fhmIHDcNDAQThm4DAcM3AYDho4DMcMHIZjBgAAAAAAAAAAAAAAAHDrCzxcUHhZjQv3AAAAAElFTkSuQmCC" alt="Logo on dark" />
+                    </div>
+                    <div class="variant-label">Primary — Dark Background</div>
+                </div>
+                <div style="flex:1; text-align:center;">
+                    <div class="logo-variant gold">
+                        <svg width="180" height="42" viewBox="0 0 245 57" xmlns="http://www.w3.org/2000/svg">
+                            <text x="4" y="40" font-family="industry, sans-serif" font-weight="700" font-size="36" fill="#090d1a" letter-spacing="4">TECNO<tspan font-style="italic">S</tspan>ALDO</text>
+                        </svg>
+                    </div>
+                    <div class="variant-label">Reversed — Gold Background</div>
+                </div>
+                <div style="flex:1; text-align:center;">
+                    <div class="logo-variant light">
+                        <svg width="180" height="42" viewBox="0 0 245 57" xmlns="http://www.w3.org/2000/svg">
+                            <text x="4" y="40" font-family="industry, sans-serif" font-weight="700" font-size="36" fill="#090d1a" letter-spacing="4">TECNO<tspan font-style="italic">S</tspan>ALDO</text>
+                        </svg>
+                    </div>
+                    <div class="variant-label">Dark Mark — Light Background</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLOR PALETTE -->
+        <div class="color-section">
+            <div class="section-title">Color Palette</div>
+            <div class="color-row">
+                <div class="color-chip">
+                    <div class="color-swatch" style="background: #090d1a;"></div>
+                    <div class="color-name">Midnight Navy</div>
+                    <div class="color-hex">#090D1A</div>
+                    <div class="color-rgb">R9 G13 B26</div>
+                </div>
+                <div class="color-chip">
+                    <div class="color-swatch" style="background: #f9b400;"></div>
+                    <div class="color-name">Tecnosaldo Gold</div>
+                    <div class="color-hex">#F9B400</div>
+                    <div class="color-rgb">R249 G180 B0</div>
+                </div>
+                <div class="color-chip">
+                    <div class="color-swatch" style="background: #1a1a1a;"></div>
+                    <div class="color-name">Carbon Black</div>
+                    <div class="color-hex">#1A1A1A</div>
+                    <div class="color-rgb">R26 G26 B26</div>
+                </div>
+                <div class="color-chip">
+                    <div class="color-swatch" style="background: #444444;"></div>
+                    <div class="color-name">Steel Gray</div>
+                    <div class="color-hex">#444444</div>
+                    <div class="color-rgb">R68 G68 B68</div>
+                </div>
+                <div class="color-chip">
+                    <div class="color-swatch" style="background: #ebebeb;"></div>
+                    <div class="color-name">Light Alloy</div>
+                    <div class="color-hex">#EBEBEB</div>
+                    <div class="color-rgb">R235 G235 B235</div>
+                </div>
+                <div class="color-chip">
+                    <div class="color-swatch outline" style="background: #ffffff;"></div>
+                    <div class="color-name">Pure White</div>
+                    <div class="color-hex">#FFFFFF</div>
+                    <div class="color-rgb">R255 G255 B255</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPOGRAPHY -->
+        <div class="type-section">
+            <div class="section-title">Typography</div>
+            <div class="type-grid">
+                <div class="type-col">
+                    <div class="type-family-label">Primary — Industry</div>
+                    <div class="type-display-large">Aa</div>
+                    <div class="type-display-medium" style="color: #444;">Industry Bold</div>
+                    <div class="type-display-medium" style="font-weight: 500; font-size: 24px; color: #888;">Industry Medium</div>
+                    <div class="type-alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br/>abcdefghijklmnopqrstuvwxyz<br/>0123456789 !@#$%&amp;</div>
+                </div>
+                <div class="type-col">
+                    <div class="type-family-label">Secondary — Acumin Pro</div>
+                    <div class="type-body-bold" style="font-size: 48px; line-height:1;">Aa</div>
+                    <div class="type-body-bold">Acumin Pro Bold</div>
+                    <div class="type-body-large" style="font-size: 24px; color: #888;">Acumin Pro Regular</div>
+                    <div class="type-body-sample">La saldatura professionale richiede<br/>precisione, affidabilità e competenza.<br/>Tecnosaldo è il tuo partner tecnico<br/>di fiducia in Liguria dal 2025.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRAND PILLARS -->
+        <div class="pattern-section">
+            <div class="section-title">Brand Pillars</div>
+            <div class="pattern-grid">
+                <div class="pattern-card">
+                    <div class="pattern-icon">
+                        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2L20 12H28L22 18L24 28L16 22L8 28L10 18L4 12H12L16 2Z" stroke="#f9b400" stroke-width="1.5" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="pattern-label">Eccellenza</div>
+                    <div class="pattern-desc">Prodotti di qualità superiore<br/>da marchi leader mondiali</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-icon">
+                        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="16" r="10" stroke="#f9b400" stroke-width="1.5"/>
+                            <path d="M16 6V16L22 22" stroke="#f9b400" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="pattern-label">Presenza</div>
+                    <div class="pattern-desc">Sempre disponibili, prima,<br/>durante e dopo ogni fornitura</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-icon">
+                        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 26L14 6L18 18L26 8" stroke="#f9b400" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="pattern-label">Innovazione</div>
+                    <div class="pattern-desc">Tecnologie d'avanguardia<br/>a tua disposizione</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-icon">
+                        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 6C12 6 8 9 8 14C8 20 16 26 16 26C16 26 24 20 24 14C24 9 20 6 16 6Z" stroke="#f9b400" stroke-width="1.5"/>
+                            <circle cx="16" cy="14" r="3" stroke="#f9b400" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div class="pattern-label">Passione</div>
+                    <div class="pattern-desc">La saldatura è la nostra<br/>ragione d'essere</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-icon">
+                        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="6" y="6" width="20" height="20" rx="2" stroke="#f9b400" stroke-width="1.5"/>
+                            <path d="M11 16L14 19L21 12" stroke="#f9b400" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="pattern-label">Affidabilità</div>
+                    <div class="pattern-desc">Rispettiamo ogni impegno.<br/>La fiducia è il nostro bene</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRAND VALUES TEXT -->
+        <div class="values-section">
+            <div class="section-title">Brand Voice</div>
+            <div class="values-grid">
+                <div class="value-item">
+                    <div class="value-name">Tone</div>
+                    <div class="value-desc">Professionale, diretto, autorevole. Parliamo la lingua di chi lavora sul campo ogni giorno.</div>
+                </div>
+                <div class="value-item">
+                    <div class="value-name">Messaggio</div>
+                    <div class="value-desc">Non solo prodotti: siamo il tuo partner tecnico. Competenza reale, supporto dedicato, soluzioni su misura.</div>
+                </div>
+                <div class="value-item">
+                    <div class="value-name">Posizionamento</div>
+                    <div class="value-desc">Distributore ufficiale autorizzato Miller Electric &amp; ESAB per la Liguria. Vendita, assistenza, formazione.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOGO CONSTRUCTION -->
+        <div class="construction-section">
+            <div class="section-title">Logo Guidelines</div>
+            <div class="construction-grid">
+                <div class="construction-box">
+                    <div class="clearspace-demo">
+                        <div class="clearspace-marker"></div>
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAA5CAYAAADum22qAAACl0lEQVR4nO3VS04sQQxE0V4Bi2cRjFkgYtBSCxVU2uFwfrhH6tGjnP7qPR4AAAAAAAAAAAAAAAAA0OXz4/3t+zc7DwAFngfNYQOb+3nMHDWwMQ4aOMRvx8xRAxu6O2iOGtjEyDFz1MAmOGjgEJFj5qiBhWWOmYOGXfeSnbLUJxz0avksKzvszFLsEns0XrbHrhlUzni0tqr8o/Ej+a2Ut3sWpQ+rB6IU665BaXh33hWznbU/kfiRHFfKu2Mm1oPYPX5Fw7vzVmYbWhxTDaOxo7l25e2KH6rZlcAzid1iZ+OO9tfd88wb4auYvDeZfN15d/RFrX0oQff3s+JXNjy6sHe5VxxFR4+qe9s1V6VeNXdn7aFCnN+vEnvkvat3XQtbtWBKfs69cM3Wuc8V8atiWB9wLJO7+OwiK3/vGHxl76trcMdX+pb9fuTfO3KUHlCTU4fZOfhoXUoPsjlGFkydgSt2VX+UvinfV+TtrH+p/6Wv3nQVPxLLtfxKjsq70Ryd8Z1LPXOf1fzU2ksecA+za/Bd9UXyvovhPipnfNdiz97njhyXb8Jfb3UOvqO+6sG7j8oZv3O2nfvckaP1AXdyruFX11k9eOfSj8R31Ow4jmxtzr448ytpgpqgOtTOuDNrXWXhO5d3p53piq/MdrjxswfXtRxV/XqNNTtXZVYjfz9zL2bsS0dt2dmGmq9+v3oTM82cmXdsuvk87r5zvLnyr6O+zGxTzZ85PNc7V/Eq++bMuyrHaH9W2ovuX0eN0dneUh7arZFXcSr75si7KrfoW2o+kRlU7oxz/yp7rewe/hGWCzgIBw0chGMGDsNBA4fhmIHDcNDAQThm4DAcM3AYDho4DMcMHIZjBgAAAAAAAAAAAAAAAHDrCzxcUHhZjQv3AAAAAElFTkSuQmCC" alt="Clear space" />
+                    </div>
+                    <div class="construction-label">Clear Space — Minimum 1× "S" height around logo</div>
+                </div>
+                <div class="construction-box">
+                    <div class="min-size-demo">
+                        <div class="min-size-item">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAA5CAYAAADum22qAAACl0lEQVR4nO3VS04sQQxE0V4Bi2cRjFkgYtBSCxVU2uFwfrhH6tGjnP7qPR4AAAAAAAAAAAAAAAAA0OXz4/3t+zc7DwAFngfNYQOb+3nMHDWwMQ4aOMRvx8xRAxu6O2iOGtjEyDFz1MAmOGjgEJFj5qiBhWWOmYOGXfeSnbLUJxz0avksKzvszFLsEns0XrbHrhlUzni0tqr8o/Ej+a2Ut3sWpQ+rB6IU665BaXh33hWznbU/kfiRHFfKu2Mm1oPYPX5Fw7vzVmYbWhxTDaOxo7l25e2KH6rZlcAzid1iZ+OO9tfd88wb4auYvDeZfN15d/RFrX0oQff3s+JXNjy6sHe5VxxFR4+qe9s1V6VeNXdn7aFCnN+vEnvkvat3XQtbtWBKfs69cM3Wuc8V8atiWB9wLJO7+OwiK3/vGHxl76trcMdX+pb9fuTfO3KUHlCTU4fZOfhoXUoPsjlGFkydgSt2VX+UvinfV+TtrH+p/6Wv3nQVPxLLtfxKjsq70Ryd8Z1LPXOf1fzU2ksecA+za/Bd9UXyvovhPipnfNdiz97njhyXb8Jfb3UOvqO+6sG7j8oZv3O2nfvckaP1AXdyruFX11k9eOfSj8R31Ow4jmxtzr448ytpgpqgOtTOuDNrXWXhO5d3p53piq/MdrjxswfXtRxV/XqNNTtXZVYjfz9zL2bsS0dt2dmGmq9+v3oTM82cmXdsuvk87r5zvLnyr6O+zGxTzZ85PNc7V/Eq++bMuyrHaH9W2ovuX0eN0dneUh7arZFXcSr75si7KrfoW2o+kRlU7oxz/yp7rewe/hGWCzgIBw0chGMGDsNBA4fhmIHDcNDAQThm4DAcM3AYDho4DMcMHIZjBgAAAAAAAAAAAAAAAHDrCzxcUHhZjQv3AAAAAElFTkSuQmCC" style="width: 120px;" alt="Print" />
+                            <span>Print: min 30mm</span>
+                        </div>
+                        <div class="min-size-item">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAA5CAYAAADum22qAAACl0lEQVR4nO3VS04sQQxE0V4Bi2cRjFkgYtBSCxVU2uFwfrhH6tGjnP7qPR4AAAAAAAAAAAAAAAAA0OXz4/3t+zc7DwAFngfNYQOb+3nMHDWwMQ4aOMRvx8xRAxu6O2iOGtjEyDFz1MAmOGjgEJFj5qiBhWWOmYOGXfeSnbLUJxz0avksKzvszFLsEns0XrbHrhlUzni0tqr8o/Ej+a2Ut3sWpQ+rB6IU665BaXh33hWznbU/kfiRHFfKu2Mm1oPYPX5Fw7vzVmYbWhxTDaOxo7l25e2KH6rZlcAzid1iZ+OO9tfd88wb4auYvDeZfN15d/RFrX0oQff3s+JXNjy6sHe5VxxFR4+qe9s1V6VeNXdn7aFCnN+vEnvkvat3XQtbtWBKfs69cM3Wuc8V8atiWB9wLJO7+OwiK3/vGHxl76trcMdX+pb9fuTfO3KUHlCTU4fZOfhoXUoPsjlGFkydgSt2VX+UvinfV+TtrH+p/6Wv3nQVPxLLtfxKjsq70Ryd8Z1LPXOf1fzU2ksecA+za/Bd9UXyvovhPipnfNdiz97njhyXb8Jfb3UOvqO+6sG7j8oZv3O2nfvckaP1AXdyruFX11k9eOfSj8R31Ow4jmxtzr448ytpgpqgOtTOuDNrXWXhO5d3p53piq/MdrjxswfXtRxV/XqNNTtXZVYjfz9zL2bsS0dt2dmGmq9+v3oTM82cmXdsuvk87r5zvLnyr6O+zGxTzZ85PNc7V/Eq++bMuyrHaH9W2ovuX0eN0dneUh7arZFXcSr75si7KrfoW2o+kRlU7oxz/yp7rewe/hGWCzgIBw0chGMGDsNBA4fhmIHDcNDAQThm4DAcM3AYDho4DMcMHIZjBgAAAAAAAAAAAAAAAHDrCzxcUHhZjQv3AAAAAElFTkSuQmCC" style="width: 80px;" alt="Digital" />
+                            <span>Digital: min 100px</span>
+                        </div>
+                        <div class="min-size-item">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAA5CAYAAADum22qAAACl0lEQVR4nO3VS04sQQxE0V4Bi2cRjFkgYtBSCxVU2uFwfrhH6tGjnP7qPR4AAAAAAAAAAAAAAAAA0OXz4/3t+zc7DwAFngfNYQOb+3nMHDWwMQ4aOMRvx8xRAxu6O2iOGtjEyDFz1MAmOGjgEJFj5qiBhWWOmYOGXfeSnbLUJxz0avksKzvszFLsEns0XrbHrhlUzni0tqr8o/Ej+a2Ut3sWpQ+rB6IU665BaXh33hWznbU/kfiRHFfKu2Mm1oPYPX5Fw7vzVmYbWhxTDaOxo7l25e2KH6rZlcAzid1iZ+OO9tfd88wb4auYvDeZfN15d/RFrX0oQff3s+JXNjy6sHe5VxxFR4+qe9s1V6VeNXdn7aFCnN+vEnvkvat3XQtbtWBKfs69cM3Wuc8V8atiWB9wLJO7+OwiK3/vGHxl76trcMdX+pb9fuTfO3KUHlCTU4fZOfhoXUoPsjlGFkydgSt2VX+UvinfV+TtrH+p/6Wv3nQVPxLLtfxKjsq70Ryd8Z1LPXOf1fzU2ksecA+za/Bd9UXyvovhPipnfNdiz97njhyXb8Jfb3UOvqO+6sG7j8oZv3O2nfvckaP1AXdyruFX11k9eOfSj8R31Ow4jmxtzr448ytpgpqgOtTOuDNrXWXhO5d3p53piq/MdrjxswfXtRxV/XqNNTtXZVYjfz9zL2bsS0dt2dmGmq9+v3oTM82cmXdsuvk87r5zvLnyr6O+zGxTzZ85PNc7V/Eq++bMuyrHaH9W2ovuX0eN0dneUh7arZFXcSr75si7KrfoW2o+kRlU7oxz/yp7rewe/hGWCzgIBw0chGMGDsNBA4fhmIHDcNDAQThm4DAcM3AYDho4DMcMHIZjBgAAAAAAAAAAAAAAAHDrCzxcUHhZjQv3AAAAAElFTkSuQmCC" style="width: 50px;" alt="Favicon" />
+                            <span>Favicon: min 32px</span>
+                        </div>
+                    </div>
+                    <div class="construction-label">Minimum Reproduction Sizes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="gold-line" style="bottom: 130px;"></div>
+        <div class="footer-band">
+            <div class="footer-left">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAA5CAYAAADum22qAAACl0lEQVR4nO3VS04sQQxE0V4Bi2cRjFkgYtBSCxVU2uFwfrhH6tGjnP7qPR4AAAAAAAAAAAAAAAAA0OXz4/3t+zc7DwAFngfNYQOb+3nMHDWwMQ4aOMRvx8xRAxu6O2iOGtjEyDFz1MAmOGjgEJFj5qiBhWWOmYOGXfeSnbLUJxz0avksKzvszFLsEns0XrbHrhlUzni0tqr8o/Ej+a2Ut3sWpQ+rB6IU665BaXh33hWznbU/kfiRHFfKu2Mm1oPYPX5Fw7vzVmYbWhxTDaOxo7l25e2KH6rZlcAzid1iZ+OO9tfd88wb4auYvDeZfN15d/RFrX0oQff3s+JXNjy6sHe5VxxFR4+qe9s1V6VeNXdn7aFCnN+vEnvkvat3XQtbtWBKfs69cM3Wuc8V8atiWB9wLJO7+OwiK3/vGHxl76trcMdX+pb9fuTfO3KUHlCTU4fZOfhoXUoPsjlGFkydgSt2VX+UvinfV+TtrH+p/6Wv3nQVPxLLtfxKjsq70Ryd8Z1LPXOf1fzU2ksecA+za/Bd9UXyvovhPipnfNdiz97njhyXb8Jfb3UOvqO+6sG7j8oZv3O2nfvckaP1AXdyruFX11k9eOfSj8R31Ow4jmxtzr448ytpgpqgOtTOuDNrXWXhO5d3p53piq/MdrjxswfXtRxV/XqNNTtXZVYjfz9zL2bsS0dt2dmGmq9+v3oTM82cmXdsuvk87r5zvLnyr6O+zGxTzZ85PNc7V/Eq++bMuyrHaH9W2ovuX0eN0dneUh7arZFXcSr75si7KrfoW2o+kRlU7oxz/yp7rewe/hGWCzgIBw0chGMGDsNBA4fhmIHDcNDAQThm4DAcM3AYDho4DMcMHIZjBgAAAAAAAAAAAAAAAHDrCzxcUHhZjQv3AAAAAElFTkSuQmCC" alt="Tecnosaldo" />
+                <div class="footer-divider"></div>
+                <div class="footer-info">
+                    <span class="highlight">www.tecnosaldo.it</span><br/>
+                    commerciale@tecnosaldo.it<br/>
+                    +39 393 4775160
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-year">20<span>26</span></div>
+                <div class="footer-label">Brand Guidelines</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
